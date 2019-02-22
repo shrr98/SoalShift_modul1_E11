@@ -156,23 +156,46 @@ sebagai berikut:
 </p>
 <ol>
   <li>
-    Buatlah file soal4.sh berisi kode berikut</br>
+    Buatlah file soal4.sh berisi kode berikut<br>
     <pre>
       #!/bin/bash
-
       isi=$(cat "/var/log/syslog")
       factor=$(date +%H)
       filename=$(date +'%H:%M %2d-%2m-%Y')
-
       lowcast=''
       for hrf in {a..z}; do
         lowcast="$lowcast""$hrf"
       done
       lowcast="$lowcast""$lowcast"
-      upcast=$(echo "$lowcast" | tr '[a-z]' '[A-Z]') 
-
+      upcast=$(echo "$lowcast" | tr '[a-z]' '[A-Z]')
       echo "$isi" | tr "${lowcast:0:26}" "${lowcast:${factor}:26}" | tr "${upcast:0:26}" "${upcast:${factor}:26}" > "$filename"
     </pre>
+  </li>
+  <li>
+    Agar file syslog ter-backup setiap jam, edit crontab ( <code> crontab -e </code> ) dan tambahkan baris berikut<br>
+    <code>0 * * * * bash /home/trash/sisop/praktikum1/soal4.sh</code>
+  </li>
+  <li>
+    Untuk decryptor, buatlah file soal4_d.sh berisi kode berikut<br>
+    <pre>
+      #!/bin/bash
+
+      filename="$1"
+      isi=$(cat "$filename")
+      factor=$(echo "$filename" | awk -F: '{print $1}')
+
+      lowcast=''
+      for hrf in {a..z}; do
+              lowcast="$lowcast""$hrf"
+      done
+      lowcast="$lowcast""$lowcast"
+      upcast=$(echo "$lowcast" | tr '[a-z]' '[A-Z]') 
+
+      echo "$isi" | tr "${lowcast:${factor}:26}" "${lowcast:0:26}" | tr "${upcast:${factor}:26}" "${upcast:0:26}" > "$filename"_d
+
+
+      IFS=' '
+  </pre>
   </li>
 </ol>
 
@@ -192,5 +215,6 @@ sebagai berikut:
 </p>
 <ol>
   <li>
+    <pre>awk 'NF<13 && tolower($0) !~ /sudo/ && tolower($0) ~ /cron/' /var/log/syslog > /home/trash/modul1/logs</pre>
   </li>
 </ol>
