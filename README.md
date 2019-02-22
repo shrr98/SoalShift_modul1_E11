@@ -119,11 +119,13 @@ poin b.
 
 <h3>Nomor 3</h3>
 <p align="justify">
-  Buatlah sebuah script bash yang dapat menghasilkan password secara acak
-sebanyak 12 karakter yang terdapat huruf besar, huruf kecil, dan angka. Password
-acak tersebut disimpan pada file berekstensi .txt dengan ketentuan pemberian nama
-sebagai berikut:
+  Buat sebuah script bash yang mana script tersebut menghasilkan password secara acak sebanyak 12 karakter 
+yang terdapat huruf besar, huruf kecil, dan angka. Password acak tersebut disimpan dalam file password.txt.
 <br>
+  <pre>
+  head /dev/urandom | tc -dr 0-9 | head -c 1 >> password$flag.txt
+  head /dev/urandom | tc -dr A-Za-z0-9 | head -c 11 >> password$flag.txt
+  </pre>
   a. Jika tidak ditemukan file password1.txt maka password acak tersebut disimpan pada file bernama password1.txt
   <br>
   b. Jika file password1.txt sudah ada maka password acak baru akan disimpan pada file bernama password2.txt dan begitu seterusnya.
