@@ -1,0 +1,10 @@
+### NOMOR 1
+#14 14 14 2 * bash /home/trash/sisop/praktikum1/soal1.sh
+#* * * * 5 bash /home/trash/sisop/praktikum1/soal1.sh
+
+### NOMOR 4
+#0 * * * * bash /home/trash/sisop/praktikum1/soal4.sh
+
+### NOMOR 5
+#2-30/6 * * * * bash /home/trash/sisop/praktikum1/soal5.sh
+
