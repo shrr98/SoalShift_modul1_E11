@@ -68,19 +68,50 @@ poin b.
 </p>
 <ol>
   <li>
-    Download file WA_Sales_Products_2012-14.csv dan pindahkan ke direktori praktikum1. Kemudian buat file soal2.sh.
+    Download file WA_Sales_Products_2012-14.csv dan pindahkan ke direktori praktikum1.
   </li>
   <li>
-    Untuk point a, tambahkan baris berikut ke dalam soal2.sh:<br>
+    Untuk point a, jalankan command berikut:<br>
     <code>
       awk -F, 'BEGIN {max = 0} NR>1 && $7 == "2012" { qty[$1]+=$10 } END { for(i in qty) { if(qty[i]>max) { max = qty[i]; neg = i}} print neg }' WA_Sales_Products_2012-14.csv > output_2A
-  </code>
+    </code>
     <h6>Penjelasan:</h6>
     <ul>
       <li>Set separator menjadi koma (',').</li>
       <li>Sebelum repeat, set max=0.</li>
       <li>Untuk setiap iterasi untuk nomor baris > 1, jika field Year ($7)= 2012, quantity untuk Country ($1) ditambahkan dengan quantity pada current record ($10).</li>
       <li>Setelah selesai repeat, mencari Country (neg) dengan total quantity (qty) terbanyak kemudian print neg. Output awk ini disimpan dalam file output_2A untuk selanjutnya digunakan di point b dan c.</li>
+    </ul>
+  </li>
+  <li>
+    Untuk point b, jalankan command berikut:<br>
+    <code>
+      awk -v var="$(cat output_2A)" -F, 'NR>1 && $7=="2012" && $1==var { qty[$4]+=$10 } END { for(i in qty) {print qty[i] ","  i } }' WA_Sales_Products_2012-14.csv | sort -nr | head -3 | awk -F, '{ print $2 }' > output_2B
+    </code>
+    <h6>Penjelasan:</h6>
+    <ul>
+      <li>Set variabel var dengan isi file output_2A dan separator menjadi koma (',').</li>
+      <li>Untuk setiap iterasi untuk nomor baris > 1, jika field Year ($7)= 2012 dan Country ($1) = var, quantity untuk Prodduct Line ($4) ditambahkan dengan quantity pada current record ($10).</li>
+      <li>Setelah selesai repeat, print semua pasangan quantity dan Product Line (dipisahkan dengan koma)</li>
+      <li>Sort hasilnya berdasarkan quantity ( -nr : numerical order, descending )</li>
+      <li>Ambil 3 teratas ( head -3 )</li>
+      <li>Print 3 Product Line teratas. Output dimasukkan ke file output_2B untuk digunakan pada soal point c.</li>
+    </ul>
+  </li>
+  <li>
+    Untuk point c, jalankan command berikut:<br>
+    <code>
+      awk -v pl="$(cat output_2B | tr '\n', ',')" -v stt="$(cat output_2A)" -F, 'BEGIN {split(pl, pp)} NR>1 && $7=="2012"  && $1==stt { for(j in pp) { if (pp[j]==$4){qty[$6]+=$10 }}} END { for(i in qty) {print qty[i] "," i} }' WA_Sales_Products_2012-14.csv | sort -nr | head -3 |awk -F, '{print $2}'
+    </code>
+    <h6>Penjelasan:</h6>
+    <ul>
+      <li>Set variabel pl dengan isi file output_2B, ubar karakter newline menjadi koma, set variabel stt dengan isi file output_2A dan separator menjadi koma (',').</li>
+      <li>Sebelum repeat, split variabel pl menjadi pp</li>
+      <li>Untuk setiap iterasi untuk nomor baris > 1, jika field Year ($7)= 2012 dan Country ($1) = stt, jika Product Line ($4) anggota pp, maka quantity untuk Prodduct ($6) ditambahkan dengan quantity pada current record ($10).</li>
+      <li>Setelah selesai repeat, print semua pasangan quantity dan Product (dipisahkan dengan koma)</li>
+      <li>Sort hasilnya berdasarkan quantity ( -nr : numerical order, descending )</li>
+      <li>Ambil 3 teratas ( head -3 )</li>
+      <li>Print 3 Product ($2) teratas.</li>
     </ul>
   </li>
 </ol>
@@ -125,6 +156,23 @@ sebagai berikut:
 </p>
 <ol>
   <li>
+    Buatlah file soal4.sh berisi kode berikut</br>
+    <pre>
+      #!/bin/bash
+
+      isi=$(cat "/var/log/syslog")
+      factor=$(date +%H)
+      filename=$(date +'%H:%M %2d-%2m-%Y')
+
+      lowcast=''
+      for hrf in {a..z}; do
+        lowcast="$lowcast""$hrf"
+      done
+      lowcast="$lowcast""$lowcast"
+      upcast=$(echo "$lowcast" | tr '[a-z]' '[A-Z]') 
+
+      echo "$isi" | tr "${lowcast:0:26}" "${lowcast:${factor}:26}" | tr "${upcast:0:26}" "${upcast:${factor}:26}" > "$filename"
+    </pre>
   </li>
 </ol>
 
