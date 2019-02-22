@@ -124,10 +124,15 @@ poin b.
   <ol>
     <li> Untuk menciptakan 12 karakter menggunakan code dibawah ini<br>
      <pre>
-        head /dev/urandom | tc -dr 0-9 | head -c 1 >> password$flag.txt
-        head /dev/urandom | tc -dr A-Za-z0-9 | head -c 11 >> password$flag.txt
+        randompw(){
+          pw="$(head /dev/urandom | tr -dc 0-9 | head -c 1)"
+          pw="$pw""$(head /dev/urandom | tr -dc A-Z | head -c 1)"
+          pw="$pw""$(head /dev/urandom | tr -dc a-z | head -c 1)"
+          pw="$pw""$(head /dev/urandom | tr -dc A-Za-z0-9 | head -c 9)"
+          pw="$(echo "$pw" | fold -w1 | sort -R | tr -d '\n')"
+        }
       </pre>
-    Dari code tersebut, terlihat bahwa dari 12 karakter yang akan dirandom, karakter pertama pasti angka dan 11 lainnya random dari   huruf besar, huruf kecil, dan angka<br>
+    Dari code tersebut, terlihat bahwa dari 12 karakter yang akan dirandom, minimum terdapat 1 huruf besar, 1 huruf kecil, dan 1 angla sedangkan 9 huruf lainnya random dari huruf besar, huruf kecil, dan angka<br>
     </li>
   <li>
   Jika tidak ditemukan file password1.txt maka password acak disimpan didalam file bernama password1.txt. Jika file password1.txt sudah ada, maka hasil script disimpan didalam file bernama password2.txt dan begitu seterusnya. Urutan nama file tidak boleh ada yang   terlewatkan walaupun ada file yang dihapus<br>
@@ -138,21 +143,49 @@ poin b.
    agar file password ada secara terurut. Dan jika sudah ada, maka flag akan di increment.<br>
    </li>
    <li>
-  Dan yang terakhir aturlah agar setiap karakternya bisa terdiri dari huruf besar, huruf kecil, dan angka agar peluang password yang dihasilkan sama sangat kecil.
+  Password yang dihasilkan tidak boleh sama sehingga perlu ditambahkan kode berikut<br>
   <pre>
-#!/bin/bash
-flag=1
-while true
-do
-	if ! [[ -f password$flag.txt ]]; then
-      		head /dev/urandom | tc -dr 0-9 | head -c 1 >> password$flag.txt
-		head /dev/urandom | tr -dc A-Za-z0-9 | head -c 12 > password$flag.txt
-		break
-	fi
-	flag=$((flag+1))
-done
+    while true; do
+			randompw
+			if [[ "$(awk -v pw="$pw" 'pw==$0{print $0}' password*.txt)" -eq "" ]]; then
+				echo "$pw" > password$flag.txt
+				break
+			fi
+    done
   </pre>
-  Dari code diatas terlihat bahwa program akan selalu berjalan untuk mencari file password$flag.txt mana yang belum ada. Dan seiring pencariannya flag akan bertambah agar nama file sesuai dengan urutan yang ada. Dan juga karakter pertama dari program tersebut diisi dengan angka untuk memastikan ada angka pada passwordnya. Dan 11 lainnya akan di random antara angka, huruf besar, dan huruf kecil agar kemungkinan password yang sama muncul kecil.
+  Dari kode di atas terlihat bahwa program akan selalu menjalankan fungsi randompw selama ditemukan password yang sama dengan hasil random password. Jika password unique, maka password disimpan dalam file password$flag.txt.
+  </li>
+  <li>
+    Kode lengkap untuk soal nomor 3 : <br>
+    <pre>
+      #!/bin/bash
+      <br>
+      pw=''
+      <br>
+      randompw(){
+        pw="$(head /dev/urandom | tr -dc 0-9 | head -c 1)"
+              pw="$pw""$(head /dev/urandom | tr -dc A-Z | head -c 1)"
+              pw="$pw""$(head /dev/urandom | tr -dc a-z | head -c 1)"
+              pw="$pw""$(head /dev/urandom | tr -dc A-Za-z0-9 | head -c 9)"
+        pw="$(echo "$pw" | fold -w1 | sort -R | tr -d '\n')"      
+      }
+      <br>
+      flag=1
+      while true
+      do
+        if ! [[ -f password$flag.txt ]]; then
+          while true; do
+            randompw
+            if [[ "$(awk -v pw="$pw" 'pw==$0{print $0}' password*.txt)" -eq "" ]]; then
+              echo "$pw" > password$flag.txt
+              break
+            fi
+          done
+          break
+        fi
+        flag=$((flag+1))
+      done
+    </pre>
   </li>
 </ol>
 
