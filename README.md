@@ -119,24 +119,42 @@ poin b.
 
 <h3>Nomor 3</h3>
 <p align="justify">
-  Buat sebuah script bash yang mana script tersebut menghasilkan password secara acak sebanyak 12 karakter 
-yang terdapat huruf besar, huruf kecil, dan angka. Password acak tersebut disimpan dalam file password.txt.
+  Buat sebuah script bash yang mana script tersebut menghasilkan password secara acak sebanyak 12 karakter yang terdapat huruf besar, huruf kecil, dan angka. Password acak tersebut disimpan dalam file password.txt.
 <br>
+  <ol>
+    <li>
+     <pre>
+        head /dev/urandom | tc -dr 0-9 | head -c 1 >> password$flag.txt
+        head /dev/urandom | tc -dr A-Za-z0-9 | head -c 11 >> password$flag.txt
+      </pre>
+    Dari code tersebut, terlihat bahwa dari 12 karakter yang akan dirandom, karakter pertama pasti angka dan 11 lainnya random dari   huruf besar, huruf kecil, dan angka<br>
+    </li>
+  <li>
+  Jika tidak ditemukan file password1.txt maka password acak disimpan didalam file bernama password1.txt. Jika file password1.txt sudah ada, maka hasil script disimpan didalam file bernama password2.txt dan begitu seterusnya. Urutan nama file tidak boleh ada yang   terlewatkan walaupun ada file yang dihapus<br>
+
+   <pre>if ! [[-f password$flag.txt]]; then</pre>
+
+   Bertujuan untuk mengecek apakah file password$flag.txt sudah ada atau belum dimana $flag merupakan sebagai penanda
+   agar file password ada secara terurut. Dan jika sudah ada, maka flag akan di increment.<br>
+   </li>
+   <li>
+  Dan yang terakhir aturlah agar setiap karakternya bisa terdiri dari huruf besar, huruf kecil, dan angka agar peluang password yang dihasilkan sama sangat kecil.
   <pre>
-  head /dev/urandom | tc -dr 0-9 | head -c 1 >> password$flag.txt
-  head /dev/urandom | tc -dr A-Za-z0-9 | head -c 11 >> password$flag.txt
+    #!/bin/bash
+flag=1
+while true
+do
+	  if ! [[ -f password$flag.txt ]]; then
+      head /dev/urandom | tc -dr 0-9 | head -c 1 >> password$flag.txt
+		  head /dev/urandom | tr -dc A-Za-z0-9 | head -c 12 > password$flag.txt
+		break
+	fi
+	flag=$((flag+1))
+done
   </pre>
-  Dari code tersebut, terlihat bahwa dari 12 karakter yang akan dirandom, karakter pertama pasti angka dan 
-11 lainnya random dari huruf besar, huruf kecil, dan angka<br>
-
-Jika tidak ditemukan file password1.txt maka password acak disimpan didalam file bernama password1.txt. 
-Jika file password1.txt sudah ada, maka hasil script disimpan didalam file bernama password2.txt 
-dan begitu seterusnya. Urutan nama file tidak boleh ada yang terlewatkan walaupun ada file yang dihapus<br>
-
-<pre>if ! [[-f password$flag.txt]]; then</pre>
-
-Bertujuan untuk mengecek apakah file password$flag.txt sudah ada atau belum dimana $flag merupakan sebagai penanda
-agar file password ada secara terurut. Dan jika sudah ada, maka flag akan di increment.
+  Dari code diatas terlihat bahwa program akan selalu berjalan untuk mencari file password$flag.txt mana yang belum ada. Dan seiring pencariannya flag akan bertambah agar nama file sesuai dengan urutan yang ada. Dan juga karakter pertama dari program tersebut diisi dengan angka untuk memastikan ada angka pada passwordnya. Dan 11 lainnya akan di random antara angka, huruf besar, dan huruf kecil agar kemungkinan password yang sama muncul kecil.
+  </li>
+</ol>
 
 <h3>Nomor 4</h3>
 <p align="justify">
