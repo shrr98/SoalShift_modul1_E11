@@ -2,7 +2,7 @@
 <div>
   <h3>KELOMPOK E 11</h3>
   <p>Shintya Rezky R. (05111740000017)</p>
-  <p> Arif Dharma A.  (05111740000xxx) </p>
+  <p> Arif Darma A.  (05111740000xxx) </p>
 </div>
 
 <hr>
