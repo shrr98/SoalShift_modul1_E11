@@ -126,19 +126,17 @@ yang terdapat huruf besar, huruf kecil, dan angka. Password acak tersebut disimp
   head /dev/urandom | tc -dr 0-9 | head -c 1 >> password$flag.txt
   head /dev/urandom | tc -dr A-Za-z0-9 | head -c 11 >> password$flag.txt
   </pre>
-  a. Jika tidak ditemukan file password1.txt maka password acak tersebut disimpan pada file bernama password1.txt
-  <br>
-  b. Jika file password1.txt sudah ada maka password acak baru akan disimpan pada file bernama password2.txt dan begitu seterusnya.
-  <br>
-  c. Urutan nama file tidak boleh ada yang terlewatkan meski filenya dihapus.
-  <br>
-  d. Password yang dihasilkan tidak boleh sama.
-</p>
-<ol>
-  <li>
-  </li>
-</ol>
+  Dari code tersebut, terlihat bahwa dari 12 karakter yang akan dirandom, karakter pertama pasti angka dan 
+11 lainnya random dari huruf besar, huruf kecil, dan angka<br>
 
+Jika tidak ditemukan file password1.txt maka password acak disimpan didalam file bernama password1.txt. 
+Jika file password1.txt sudah ada, maka hasil script disimpan didalam file bernama password2.txt 
+dan begitu seterusnya. Urutan nama file tidak boleh ada yang terlewatkan walaupun ada file yang dihapus<br>
+
+<pre>if ! [[-f password$flag.txt]]; then</pre>
+
+Bertujuan untuk mengecek apakah file password$flag.txt sudah ada atau belum dimana $flag merupakan sebagai penanda
+agar file password ada secara terurut. Dan jika sudah ada, maka flag akan di increment.
 
 <h3>Nomor 4</h3>
 <p align="justify">
