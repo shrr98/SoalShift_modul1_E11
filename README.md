@@ -122,7 +122,7 @@ poin b.
   Buat sebuah script bash yang mana script tersebut menghasilkan password secara acak sebanyak 12 karakter yang terdapat huruf besar, huruf kecil, dan angka. Password acak tersebut disimpan dalam file password.txt.
 <br>
   <ol>
-    <li>
+    <li> Untuk menciptakan 12 karakter menggunakan code dibawah ini<br>
      <pre>
         head /dev/urandom | tc -dr 0-9 | head -c 1 >> password$flag.txt
         head /dev/urandom | tc -dr A-Za-z0-9 | head -c 11 >> password$flag.txt
@@ -140,13 +140,13 @@ poin b.
    <li>
   Dan yang terakhir aturlah agar setiap karakternya bisa terdiri dari huruf besar, huruf kecil, dan angka agar peluang password yang dihasilkan sama sangat kecil.
   <pre>
-    #!/bin/bash
+#!/bin/bash
 flag=1
 while true
 do
-	  if ! [[ -f password$flag.txt ]]; then
-      head /dev/urandom | tc -dr 0-9 | head -c 1 >> password$flag.txt
-		  head /dev/urandom | tr -dc A-Za-z0-9 | head -c 12 > password$flag.txt
+	if ! [[ -f password$flag.txt ]]; then
+      		head /dev/urandom | tc -dr 0-9 | head -c 1 >> password$flag.txt
+		head /dev/urandom | tr -dc A-Za-z0-9 | head -c 12 > password$flag.txt
 		break
 	fi
 	flag=$((flag+1))
