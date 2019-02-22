@@ -72,9 +72,9 @@ poin b.
   </li>
   <li>
     Untuk point a, jalankan command berikut:<br>
-    <code>
+    <pre>
       awk -F, 'BEGIN {max = 0} NR>1 && $7 == "2012" { qty[$1]+=$10 } END { for(i in qty) { if(qty[i]>max) { max = qty[i]; neg = i}} print neg }' WA_Sales_Products_2012-14.csv > output_2A
-    </code>
+    </pre>
     <h6>Penjelasan:</h6>
     <ul>
       <li>Set separator menjadi koma (',').</li>
@@ -85,9 +85,9 @@ poin b.
   </li>
   <li>
     Untuk point b, jalankan command berikut:<br>
-    <code>
+    <pre>
       awk -v var="$(cat output_2A)" -F, 'NR>1 && $7=="2012" && $1==var { qty[$4]+=$10 } END { for(i in qty) {print qty[i] ","  i } }' WA_Sales_Products_2012-14.csv | sort -nr | head -3 | awk -F, '{ print $2 }' > output_2B
-    </code>
+    </pre>
     <h6>Penjelasan:</h6>
     <ul>
       <li>Set variabel var dengan isi file output_2A dan separator menjadi koma (',').</li>
@@ -100,9 +100,9 @@ poin b.
   </li>
   <li>
     Untuk point c, jalankan command berikut:<br>
-    <code>
+    <pre>
       awk -v pl="$(cat output_2B | tr '\n', ',')" -v stt="$(cat output_2A)" -F, 'BEGIN {split(pl, pp)} NR>1 && $7=="2012"  && $1==stt { for(j in pp) { if (pp[j]==$4){qty[$6]+=$10 }}} END { for(i in qty) {print qty[i] "," i} }' WA_Sales_Products_2012-14.csv | sort -nr | head -3 |awk -F, '{print $2}'
-    </code>
+    </pre>
     <h6>Penjelasan:</h6>
     <ul>
       <li>Set variabel pl dengan isi file output_2B, ubar karakter newline menjadi koma, set variabel stt dengan isi file output_2A dan separator menjadi koma (',').</li>
@@ -173,7 +173,7 @@ sebagai berikut:
   </li>
   <li>
     Agar file syslog ter-backup setiap jam, edit crontab ( <code> crontab -e </code> ) dan tambahkan baris berikut<br>
-    <code>0 * * * * bash /home/trash/sisop/praktikum1/soal4.sh</code>
+    <pre>0 * * * * bash /home/trash/sisop/praktikum1/soal4.sh</pre>
   </li>
   <li>
     Untuk decryptor, buatlah file soal4_d.sh berisi kode berikut<br>
@@ -215,6 +215,11 @@ sebagai berikut:
 </p>
 <ol>
   <li>
+    Buat file soal5.sh berisi kode berikut:<br>
     <pre>awk 'NF<13 && tolower($0) !~ /sudo/ && tolower($0) ~ /cron/' /var/log/syslog > /home/trash/modul1/logs</pre>
+  </li>
+  <li>
+    Untuk penjadwalan, tambahkan baris berikut ke dalam crontab:<br>
+    <pre>2-30/6 * * * * bash /home/trash/sisop/praktikum1/soal5.sh</pre>
   </li>
 </ol>
